@@ -1,5 +1,9 @@
 package tfconfig
 
+import (
+	"github.com/hashicorp/hcl/v2"
+)
+
 // Module is the top-level type representing a parsed and processed Terraform
 // module.
 type Module struct {
@@ -12,6 +16,9 @@ type Module struct {
 	RequiredCore      []string                        `json:"required_core,omitempty"`
 	RequiredProviders map[string]*ProviderRequirement `json:"required_providers"`
 
+	// A configuration can only provide one backend block.
+	Backend *Backend
+
 	ProviderConfigs  map[string]*ProviderConfig `json:"provider_configs,omitempty"`
 	ManagedResources map[string]*Resource       `json:"managed_resources"`
 	DataResources    map[string]*Resource       `json:"data_resources"`
@@ -21,6 +28,13 @@ type Module struct {
 	// loading, primarily for inclusion in serialized forms of the module
 	// since this slice is also returned as a second argument from LoadModule.
 	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
+}
+
+// Backend represents a backend block in the configuration.
+// https://www.terraform.io/docs/language/settings/backends/configuration.html
+type Backend struct {
+	Name string
+	Body hcl.Body
 }
 
 // ProviderConfig represents a provider block in the configuration

@@ -47,6 +47,10 @@ var terraformBlockSchema = &hcl.BodySchema{
 		{
 			Type: "required_providers",
 		},
+		{
+			Type: "backend",
+			LabelNames: []string{"name"},
+		},
 	},
 }
 

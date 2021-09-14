@@ -100,6 +100,14 @@ func LoadModuleFromFile(file *hcl.File, mod *Module) hcl.Diagnostics {
 							mod.RequiredProviders[name].VersionConstraints = append(mod.RequiredProviders[name].VersionConstraints, req.VersionConstraints...)
 						}
 					}
+				case "backend":
+					if mod.Backend != nil {
+						panic("A configuration can only provide one backend block, see https://www.terraform.io/docs/language/settings/backends/configuration.html.")
+					}
+					mod.Backend = &Backend{
+						Name: innerBlock.Labels[0],
+						Body: innerBlock.Body,
+					}
 				}
 			}
 
@@ -253,9 +261,10 @@ func LoadModuleFromFile(file *hcl.File, mod *Module) hcl.Diagnostics {
 			name := block.Labels[1]
 
 			r := &Resource{
-				Type: typeName,
-				Name: name,
-				Pos:  sourcePosHCL(block.DefRange),
+				Type:  typeName,
+				Name:  name,
+				Pos:   sourcePosHCL(block.DefRange),
+				Block: block,
 			}
 
 			var resourcesMap map[string]*Resource
