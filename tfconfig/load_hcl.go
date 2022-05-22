@@ -111,6 +111,11 @@ func LoadModuleFromFile(file *hcl.File, mod *Module) hcl.Diagnostics {
 				}
 			}
 
+		case "locals":
+			mod.Locals = append(mod.Locals, &Locals{
+				Body: block.Body,
+			})
+
 		case "variable":
 			content, _, contentDiags := block.Body.PartialContent(variableSchema)
 			diags = append(diags, contentDiags...)

@@ -19,6 +19,9 @@ type Module struct {
 	// A configuration can only provide one backend block.
 	Backend *Backend
 
+	// A list of locals blocks.
+	Locals []*Locals
+
 	ProviderConfigs  map[string]*ProviderConfig `json:"provider_configs,omitempty"`
 	ManagedResources map[string]*Resource       `json:"managed_resources"`
 	DataResources    map[string]*Resource       `json:"data_resources"`
@@ -34,6 +37,11 @@ type Module struct {
 // https://www.terraform.io/docs/language/settings/backends/configuration.html
 type Backend struct {
 	Name string
+	Body hcl.Body
+}
+
+// Locals represent a locals block in the configuration.
+type Locals struct {
 	Body hcl.Body
 }
 
