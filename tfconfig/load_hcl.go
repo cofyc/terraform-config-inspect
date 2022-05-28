@@ -344,8 +344,9 @@ func LoadModuleFromFile(file *hcl.File, mod *Module) hcl.Diagnostics {
 
 			name := block.Labels[0]
 			mc := &ModuleCall{
-				Name: block.Labels[0],
-				Pos:  sourcePosHCL(block.DefRange),
+				Name:  block.Labels[0],
+				Pos:   sourcePosHCL(block.DefRange),
+				Block: block,
 			}
 
 			// check if this is overriding an existing module
